@@ -2,10 +2,22 @@ import discord
 from discord.ext import commands, tasks
 import os
 import requests
+import time
+import signal
+TIMEOUT = 10
+
+class TimeoutException(Exception):   # Custom exception class
+    pass
+
+def timeout_handler(signum, frame):   # Custom signal handler
+    raise TimeoutException
+
+# Change the behavior of SIGALRM
+signal.signal(signal.SIGALRM, timeout_handler)
 
 
 httplist = []
-for i in range(610):
+for i in range(1000):
 	httplist.append("Web Server Returned an Unknown Error")
 httplist[100] = "Continue"
 httplist[101] = "Switching Protocols"
@@ -104,6 +116,7 @@ httplist[530] = "Origin DNS Error"
 httplist[561] = "Unauthorized (AWS Elastic Load Balancer)"
 
 httplist[609] = "Nice."
+httplist[999] = "The connection timed out after 10 seconds. This means the server most likely is down, or it spun out into an infinite loop. (The killed urlcheck() after {sec} seconds!)".format(sec=TIMEOUT)
 
 
 key=os.getenv('key')
@@ -137,6 +150,7 @@ async def shell(ctx,cmd):
       os.system(cmd)
 
 
+
 @client.command()
 async def help(ctx):
    
@@ -154,6 +168,8 @@ async def help(ctx):
 
     embed.add_field(name="$help", value="This command.")
 
+    embed.add_field(name="Bot GitHub", value="https://github.com/Killaship/survivbot")
+
     await ctx.send(embed=embed)#sends the embed.
 
 
@@ -164,6 +180,7 @@ async def serverstatus(ctx):
         await ctx.send("The server is currently down or unresponsive. The HTTP code sent was: {http}. ({phrase})".format(http=str(code), phrase=httplist[code]))
     else:
         await ctx.send("The server is currently up. (It sent a response code of 200 OK)")
+        await ctx.send("If your game is frozen, it's most likely that the client froze or crashed. The game is still relatively unstable, you'll have to reload the game.")
 
 
 @client.command()
@@ -174,9 +191,22 @@ async def checkurl(ctx,site):
     else:
         await ctx.send("The server is currently up. (It sent a response code of 200 OK)")
 
+@client.command()
+@commands.is_owner()
+async def resetbot(ctx):
+	await ctx.send("Bot is reloading, please wait a few seconds before sending commands.")
+	exit()
+
 def urlcheck(url):
-    r = requests.head(url)
-    return r.status_code
+    signal.alarm(TIMEOUT)    
+    try:
+        r = requests.head(url)
+        return r.status_code
+    except TimeoutException:
+        return 999
+        signal.alarm(0)
+
+
 
 
 
