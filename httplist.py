@@ -1,3 +1,4 @@
+TIMEOUT=10
 httplist = []
 for i in range(1000):
 	httplist.append("Web Server Returned an Unknown Error")
