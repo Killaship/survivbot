@@ -4,7 +4,8 @@ import os
 import requests
 import time
 import signal
-TIMEOUT = 10
+data=open('httplist.py','r+').read() 
+exec(data)
 
 class TimeoutException(Exception):   # Custom exception class
     pass
