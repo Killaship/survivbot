@@ -1,5 +1,11 @@
 # survivbot
 The source code for the Discord bot I made for the Surviv Reloaded Discord server.
+To run the bot, it's recommended to have the following materials:
+- 1 computer (preferably running a Unix-like OS,) capable of running discord.py and Python 3, as well as various standard libraries.
+- 1 cranial space filled with cerebrospinal fluid and grey matter.
+- Access to the program tmux on aforementioned computer, as a shell compatible with bash scripts.
+Run `runbot.sh` to run the bot. It should automatically bring the bot back up if it crashes, so make sure to hit ^C twice when stopping the bot, or killing the runbot process before stopping the bot, to prevent the bot from being restarted.
+
 
 [Discord](https://discord.gg/K97hwBtwdm)
 
