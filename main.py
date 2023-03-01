@@ -116,7 +116,7 @@ httplist[530] = "Origin DNS Error"
 httplist[561] = "Unauthorized (AWS Elastic Load Balancer)"
 
 httplist[609] = "Nice."
-httplist[999] = "The connection timed out after 10 seconds. This means the server most likely is down, or it spun out into an infinite loop. (The killed urlcheck() after {sec} seconds!)".format(sec=TIMEOUT)
+httplist[999] = "The connection timed out after 10 seconds. This means the server most likely is down, or it spun out into an infinite loop. (The bot killed urlcheck() after {sec} seconds!)".format(sec=TIMEOUT)
 
 
 key=os.getenv('key')
@@ -150,6 +150,20 @@ async def shell(ctx,cmd):
       os.system(cmd)
 
 
+  
+@client.command()
+async def links(ctx):
+    embed = discord.Embed(title="Links", description="", color=0xFF0000)
+    embed.add_field(name="Test Server", value="https://taskjourney.org:449/")
+    embed.add_field(name="Discord Perma Invite", value="https://discord.gg/K97hwBtwdm")
+    embed.add_field(name="Subreddit", value="https://reddit.com/r/survivreloaded")
+    embed.add_field(name="Github", value="https://github.com/hsanger/survivreloaded")
+    embed.add_field(name="GitLab (archived)", value="https://gitlab.com/hasanger/survivreloaded")
+    await ctx.send(embed=embed)
+
+
+
+
 
 @client.command()
 async def help(ctx):
@@ -161,6 +175,8 @@ async def help(ctx):
     
 
     embed.add_field(name="$explain", value="Explains this server and lists FAQ.")
+
+    embed.add_field(name="$links", value="Lists various links related to the project.")
 
     embed.add_field(name="$serverstatus", value="Checks whether the game server (or at least website) is up.")
 
@@ -205,6 +221,10 @@ def urlcheck(url):
     except TimeoutException:
         return 999
         signal.alarm(0)
+
+
+
+
 
 
 
