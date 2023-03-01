@@ -6,6 +6,8 @@ To run the bot, it's recommended to have the following materials:
 - Access to the program tmux on aforementioned computer, as a shell compatible with bash scripts.
 Run `runbot.sh` to run the bot. It should automatically bring the bot back up if it crashes, so make sure to hit ^C twice when stopping the bot, or killing the runbot process before stopping the bot, to prevent the bot from being restarted.
 
+Just as a note: This bot is made in Python, sorta sucks, and my code is not that great, and there's some quite insecure bits.  Not for use in a professional environment. In fact, this bot is custom made for a server I mod in, why would you?
+
 
 [Discord](https://discord.gg/K97hwBtwdm)
 
