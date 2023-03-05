@@ -247,6 +247,8 @@ async def help(ctx):
     embed.add_field(name="$serverstatus", value="Checks whether the game server (or at least website) is up.")
 
     embed.add_field(name="$getxp", value="This command shows the amount of XP the sender has.")
+    
+    embed.add_field(name="$getleaderboard", value="This command lists the 5 members of the server with the most XP!.")
 
     embed.add_field(name="$checkurl", value="Checks the connectivity of any URL.")
 
