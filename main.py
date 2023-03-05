@@ -12,6 +12,7 @@ data=open('httplist.py','r+').read()
 exec(data)
 leaderboard = []
 xp = []
+timestamps = []
 
 class TimeoutException(Exception):   # Custom exception class
     pass
@@ -48,6 +49,7 @@ async def explain(ctx):
 
 @client.event
 async def on_ready():
+    global timestamps
     global leaderboard
     global xp
     print("========")
@@ -57,7 +59,7 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('========')
-    print("reloading XP and boards")
+    print("reloading XP, timestamps, and boards")
     with open("board.txt") as file:
         leaderboard = file.read().splitlines()
         leaderboard = [int(i) for i in leaderboard]
@@ -66,10 +68,15 @@ async def on_ready():
         xp = file.read().splitlines()
         xp = [int(i) for i in xp]
         file.close()
+    with open("time.txt") as file:
+        timestamps = file.read().splitlines()
+        timestamps = [int(i) for i in timestamps]
+        file.close()
     print("done")
     print("========")
-    print(leaderboard)
-    print(xp)
+    #print(leaderboard)
+    #print(xp)
+    #print(timestamps)
 
 
 
@@ -105,6 +112,7 @@ async def initleaderboard(ctx):
 
     global leaderboard
     global xp
+    global timestamps
 
     await ctx.send("Initializing leaderboard, this may take a while.")
     time.sleep(0.5)
@@ -119,11 +127,11 @@ async def initleaderboard(ctx):
         membercount += 1
         time.sleep(.1)
     await ctx.send("Member counting finished")
-
+    for member in members:
+        timestamps.append(str(round(time.time())))
     file = open("board.txt", 'w+') 
     file.truncate(0) # overwrite file
     for i in range(len(leaderboard)):
-        #file.write(str(leaderboard[i]) + " " + str(xp[i]) + "\n")
         file.write(str(leaderboard[i]) + "\n")
     file.close()
     await ctx.send("Leaderboard exported to board.txt")
@@ -135,20 +143,38 @@ async def initleaderboard(ctx):
     file.close()
     await ctx.send("XP counts exported to xp.txt")
 
+    file = open("time.txt", 'w+') 
+    file.truncate(0) # overwrite file
+    for i in range(len(timestamps)):
+         file.write(str(timestamps[i]) + "\n")
+    file.close()
+    await ctx.send("Timestamps set in time.txt")
+
+
+
 async def syncboards():
+    global leaderboard
+    global timestamps
+    global xp
     file = open("board.txt", 'w+') 
     file.truncate(0) # overwrite file
     for i in range(len(leaderboard)):
-        #file.write(str(leaderboard[i]) + " " + str(xp[i]) + "\n")
+
         file.write(str(leaderboard[i]) + "\n")
     file.close()
-    print("Leaderboard exported to board.txt")
+
     file = open("xp.txt", 'w+') 
     file.truncate(0) # overwrite file
     for i in range(len(xp)):
          file.write(str(xp[i]) + "\n")
     file.close()
-    print("XP counts exported to xp.txt")
+
+    file = open("time.txt", 'w+') 
+    file.truncate(0) # overwrite file
+    for i in range(len(timestamps)):
+         file.write(str(timestamps[i]) + "\n")
+    file.close()
+
 
 
 @client.event
@@ -157,14 +183,16 @@ async def on_message(message):
     global totalmessages
     incXP = random.randrange(5, 10)
     totalmessages += 1
-
+    
     if id in leaderboard: # If the ID is on the leaderboard...
 
         index = leaderboard.index(id) # Find where the ID is on the leaderboard
-
-        xp[index] += incXP # Increment corresponding xp by between 5 and 10 points
-
-        print("User ID {userid} gained {xpamount}".format(userid=id,xpamount=incXP))
+        if(round(time.time()) - timestamps[index] >= 3): # 5 minute delay
+            xp[index] += incXP # Increment corresponding xp by between 5 and 10 points
+            #print("old timestamp: {time}".format(time=round(time.time())))
+            timestamps[index] = round(time.time())
+            #print("new timestamp: {time}".format(time=round(time.time())))
+            #print("User ID {userid} gained {xpamount}".format(userid=id,xpamount=incXP))
 
     else: # If user ID isn't in message
 
@@ -179,12 +207,29 @@ async def on_message(message):
 
 
 @client.command()
-async def getxp(ctx):
+async def getxp(ctx): # TODO: Allow getting XP of a specific person
     if ctx.author.id in leaderboard: # If the ID is on the leaderboard...
         index = leaderboard.index(ctx.author.id) # Find where the ID is on the leaderboard
         await ctx.send("<@{id}> has {xp} XP!".format(id=ctx.author.id,xp=xp[index]))   
     else:
         await ctx.send("Error! <@{userid}> is not on the leaderboard. :/".format(userid=ctx.author.id))
+
+@client.command()
+async def getleaderboard(ctx):
+    global leaderboard
+    global xp
+    text = []
+    indices = sorted(range(len(xp)), key=xp.__getitem__, reverse=True)
+    
+    for i in range(5):
+        user = await client.fetch_user(leaderboard[indices[i]])
+        #await ctx.send("#{row}: {user} has {pts} points!".format(row=i+1, user=user, pts=xp[indices[i]]))
+        text.append("#{row}: {user} has {pts} points!\n".format(row=i+1, user=user, pts=xp[indices[i]]))
+    print(''.join(text))
+    
+    embed = discord.Embed(title=''.join(text), description="Top 5 XP counts!", color=0xFF0000)
+    await ctx.send(embed=embed)
+
 
 @client.command()
 async def help(ctx):
@@ -233,8 +278,8 @@ async def checkurl(ctx,site):
 @client.command()
 @commands.is_owner()
 async def resetbot(ctx):
-	await ctx.send("Bot is reloading, please wait a few seconds before sending commands.")
-	exit()
+        await ctx.send("Bot is reloading, please wait a few seconds before sending commands.")
+        exit()
 
 def urlcheck(url):
     signal.alarm(TIMEOUT)    
@@ -244,8 +289,6 @@ def urlcheck(url):
     except TimeoutException:
         return 999
         signal.alarm(0)
-
-
-   
+        
 #runs the bot token.
 client.run('youshouldputarealtokenhere') # TOKEN HERE
