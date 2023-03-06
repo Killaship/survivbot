@@ -261,7 +261,7 @@ async def help(ctx):
 
 @client.command()
 async def serverstatus(ctx):
-    code = urlcheck("https://taskjourney.org:449")
+    code = urlcheck("https://survivreloaded.com/")
     if(code != 200):
         await ctx.send("The server is currently down or unresponsive. The HTTP code sent was: {http}. ({phrase})".format(http=str(code), phrase=httplist[code]))
     else:
