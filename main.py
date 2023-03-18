@@ -111,7 +111,7 @@ async def awardxp(ctx,user,amount):
 async def links(ctx):
     embed = discord.Embed(title="Links", description="", color=0xFF0000)
     embed.add_field(name="Test Server", value="https://taskjourney.org:449/")
-    embed.add_field(name="Discord Perma Invite", value="https://discord.gg/K97hwBtwdm")
+    embed.add_field(name="Discord Perma Invite", value="https://discord.resurviv.io")
     embed.add_field(name="Subreddit", value="https://reddit.com/r/survivreloaded")
     embed.add_field(name="Github", value="https://github.com/hsanger/survivreloaded")
     embed.add_field(name="GitLab (archived)", value="https://gitlab.com/hasanger/survivreloaded")
@@ -241,7 +241,7 @@ async def getleaderboard(ctx):
         text.append("#{row}: {user} has {pts} points!\n".format(row=i+1, user=user, pts=xp[indices[i]]))
     #print(''.join(text))
     
-    embed = discord.Embed(title=''.join(text), description="Top 5 XP counts!", color=0xFF0000)
+    embed = discord.Embed(title=''.join(text), description="Top 6 XP counts!", color=0xFF0000)
     await ctx.send(embed=embed)
 
 
@@ -258,7 +258,7 @@ async def help(ctx):
 
     embed.add_field(name="$links", value="Lists various links related to the project.")
 
-    embed.add_field(name="$serverstatus", value="Checks whether the game server (or at least website) is up.")
+    embed.add_field(name="$serverstatus", value="Checks whether the game server (or at least website) is up. It checks all websites on which the game is hosted.")
 
     embed.add_field(name="$getxp", value="This command shows the amount of XP the sender has.")
     
@@ -275,7 +275,24 @@ async def help(ctx):
 
 @client.command()
 async def serverstatus(ctx):
+    await ctx.send("Checking 3 site(s)") # todo: make this into a for loop that reads from an array
+    await ctx.send("*https://taskjourney.org:449*")
+    code = urlcheck("https://taskjourney.org:449/")
+    if(code != 200):
+        await ctx.send("The server is currently down or unresponsive. The HTTP code sent was: {http}. ({phrase})".format(http=str(code), phrase=httplist[code]))
+    else:
+        await ctx.send("The server is currently up. (It sent a response code of 200 OK)")
+        await ctx.send("If your game is frozen, it's most likely that the client froze or crashed. The game is still relatively unstable, you'll have to reload the game.")
+        code = urlcheck("https://survivreloaded.com/")
+    await ctx.send("*https://survivreloaded.com/*")
     code = urlcheck("https://survivreloaded.com/")
+    if(code != 200):
+        await ctx.send("The server is currently down or unresponsive. The HTTP code sent was: {http}. ({phrase})".format(http=str(code), phrase=httplist[code]))
+    else:
+        await ctx.send("The server is currently up. (It sent a response code of 200 OK)")
+        await ctx.send("If your game is frozen, it's most likely that the client froze or crashed. The game is still relatively unstable, you'll have to reload the game.")  
+    code = urlcheck("https://resurviv.io/")
+    await ctx.send("*https://resurviv.io/*")
     if(code != 200):
         await ctx.send("The server is currently down or unresponsive. The HTTP code sent was: {http}. ({phrase})".format(http=str(code), phrase=httplist[code]))
     else:
