@@ -9,7 +9,7 @@ import time
 
 
 bottoken = open("token.txt","r").readline()
-print(bottoken)
+print(bottoken.strip())
 membercount=0
 totalmessages=0 # total number of messages since bot turned on
 data=open('httplist.py','r+').read()
