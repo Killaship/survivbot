@@ -6,7 +6,7 @@ import time
 import signal
 import random
 import time
-import dotenv
+
 
 bottoken = os.getenv("TOKEN")
 print(bottoken)
