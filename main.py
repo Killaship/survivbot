@@ -7,10 +7,7 @@ import signal
 import random
 import time
 import dotenv
-from dotenv import load_dotenv
 
-
-load_dotenv()
 bottoken = os.getenv("TOKEN")
 print(bottoken)
 membercount=0
