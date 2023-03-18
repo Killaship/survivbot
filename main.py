@@ -297,4 +297,4 @@ def urlcheck(url):
         signal.alarm(0)
         
 #runs the bot token.
-client.run(bottoken)
+client.run(bottoken.strip())
