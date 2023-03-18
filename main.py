@@ -6,6 +6,7 @@ import time
 import signal
 import random
 import time
+bottoken=open('token.txt','r+').read()
 membercount=0
 totalmessages=0 # total number of messages since bot turned on
 data=open('httplist.py','r+').read()
@@ -293,4 +294,4 @@ def urlcheck(url):
         signal.alarm(0)
         
 #runs the bot token.
-client.run('youshouldputarealtokenhere') # TOKEN HERE
+client.run(bottoken)
