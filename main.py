@@ -317,7 +317,7 @@ async def resetbot(ctx):
 def urlcheck(url):
     signal.alarm(TIMEOUT)    
     try:
-        r = requests.head(url)
+        r = requests.head(url, timeout=3)
         return r.status_code
     except TimeoutException:
         return 999
