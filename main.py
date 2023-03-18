@@ -8,7 +8,7 @@ import random
 import time
 
 
-bottoken = str(os.getenv("TOKEN"))
+bottoken = open("token.txt","r").readline()
 print(bottoken)
 membercount=0
 totalmessages=0 # total number of messages since bot turned on
