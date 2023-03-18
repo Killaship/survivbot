@@ -235,7 +235,7 @@ async def getleaderboard(ctx):
     text = []
     indices = sorted(range(len(xp)), key=xp.__getitem__, reverse=True)
     
-    for i in range(10):
+    for i in range(6):
         user = await client.fetch_user(leaderboard[indices[i]])
         #await ctx.send("#{row}: {user} has {pts} points!".format(row=i+1, user=user, pts=xp[indices[i]]))
         text.append("#{row}: {user} has {pts} points!\n".format(row=i+1, user=user, pts=xp[indices[i]]))
