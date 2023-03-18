@@ -235,11 +235,11 @@ async def getleaderboard(ctx):
     text = []
     indices = sorted(range(len(xp)), key=xp.__getitem__, reverse=True)
     
-    for i in range(5):
+    for i in range(10):
         user = await client.fetch_user(leaderboard[indices[i]])
         #await ctx.send("#{row}: {user} has {pts} points!".format(row=i+1, user=user, pts=xp[indices[i]]))
         text.append("#{row}: {user} has {pts} points!\n".format(row=i+1, user=user, pts=xp[indices[i]]))
-    print(''.join(text))
+    #print(''.join(text))
     
     embed = discord.Embed(title=''.join(text), description="Top 5 XP counts!", color=0xFF0000)
     await ctx.send(embed=embed)
