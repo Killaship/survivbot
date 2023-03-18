@@ -214,7 +214,7 @@ async def on_message(message):
         await syncboards()
         await client.process_commands(message) # Lets bot process other commands after event is done
     except:
-        print("failed to award xp for user {user}.format(user=id)")
+        print("failed to award xp for user {user}".format(user=id))
         await client.process_commands(message) # Lets bot process other commands after event is done       
     
 
