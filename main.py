@@ -101,9 +101,9 @@ async def shell(ctx,cmd):
 @commands.is_owner()
 async def awardxp(ctx,user,amount):
     index = leaderboard.index(int(user))
-    xp[index] += amount
+    xp[index] += int(amount)
     await syncboards()
-    await ctx.send("<@{id}> has been awarded {xp} XP!".format(id=user,xp=xp[index])) 
+    await ctx.send("<@{id}> has been awarded {xp} XP!".format(id=user,xp=amount)) 
     
     
   
