@@ -205,8 +205,8 @@ async def on_message(message):
             #print("Note: $initleaderboard resets leaderboard, spams, takes a long time.") 
         await syncboards()
         await client.process_commands(message) # Lets bot process other commands after event is done
-    except:
-        await client.process_commands(message) # Lets bot process other commands after event is done
+    ##except:
+        ##await client.process_commands(message) # Lets bot process other commands after event is done
     
 
 
