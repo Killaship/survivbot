@@ -21,7 +21,7 @@ xp = []
 timestamps = []
 
 class TimeoutException(Exception):   # Custom exception class
-    pass
+    print("bot timed out")
 
 def timeout_handler(signum, frame):   # Custom signal handler (this is where OSdev IDT knowledge is relatable :p)
     raise TimeoutException
