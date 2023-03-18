@@ -6,7 +6,7 @@ import time
 import signal
 import random
 import time
-bottoken=open('token.txt','r+').read()
+bottoken=open('token.txt','r+').read().strip()
 print(bottoken)
 membercount=0
 totalmessages=0 # total number of messages since bot turned on
