@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
-bottoken = os.getenv("TOKEN") print(token)
+bottoken = os.getenv("TOKEN")
 print(bottoken)
 membercount=0
 totalmessages=0 # total number of messages since bot turned on
