@@ -194,7 +194,7 @@ async def on_message(message):
         if id in leaderboard: # If the ID is on the leaderboard...
 
             index = leaderboard.index(id) # Find where the ID is on the leaderboard
-            if(round(time.time()) - timestamps[index] >= 3): # 5 minute delay
+            if(round(time.time()) - timestamps[index] >= 30): # 30 second delay
                 xp[index] += incXP # Increment corresponding xp by between 5 and 10 points
                 #print("old timestamp: {time}".format(time=round(time.time())))
                 timestamps[index] = round(time.time())
@@ -206,7 +206,7 @@ async def on_message(message):
         await syncboards()
         await client.process_commands(message) # Lets bot process other commands after event is done
     except:
-        await ctx.send("failed to award xp for user {user}.format(user=id)")
+        print("failed to award xp for user {user}.format(user=id)")
         await client.process_commands(message) # Lets bot process other commands after event is done       
     
 
