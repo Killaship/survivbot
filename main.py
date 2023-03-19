@@ -238,7 +238,7 @@ async def getxp(ctx,user=0): # TODO: Allow getting XP of a specific person
     checkuserid = 0
     if user == 0:
         checkuserid = ctx.message.author.id
-    int(''.join(c for c in user if c.isdigit())
+    checkuserid = int(''.join(c for c in user if c.isdigit())
 
     if checkuserid in leaderboard: # If the ID is on the leaderboard...
         index = leaderboard.index(checkuserid) # Find where the ID is on the leaderboard
