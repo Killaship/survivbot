@@ -9,7 +9,6 @@ import time
 
 
 bottoken = open("token.txt","r").readline()
-print(bottoken)
 print(bottoken.strip())
 
 membercount=0
@@ -283,6 +282,7 @@ async def help(ctx):
 @client.command()
 async def serverstatus(ctx):
     await ctx.send("Checking 3 site(s)") # todo: make this into a for loop that reads from an array
+    await ctx.send("Note: This may or may not be accurate. Do not trust these results.")
     await ctx.send("*https://taskjourney.org:449*")
     code = urlcheck("https://taskjourney.org:449/")
     if(code != 200):
