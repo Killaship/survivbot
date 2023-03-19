@@ -233,8 +233,8 @@ async def on_message(message):
 
 
 @client.command()
-async def getxp(ctx,user=message.author.id): # TODO: Allow getting XP of a specific person
-    x = message.content
+async def getxp(ctx,user=ctx.message.author.id): # TODO: Allow getting XP of a specific person
+    x = ctx.message.content
     userid = x[7:]
     checkuserid = int(x[10:-1])
     if checkuserid in leaderboard: # If the ID is on the leaderboard...
