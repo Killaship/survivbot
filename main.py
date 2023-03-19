@@ -103,7 +103,6 @@ async def shell(ctx,cmd):
            await ctx.send(str(out.read()))
        except:
           os.system(cmd)
-        await ctx.send("<@{id}> has been awarded {xp} XP!".format(id=user,xp=amount))
     else:
         await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")
 @client.command()
