@@ -86,6 +86,7 @@ async def on_ready():
 
 @client.event
 async def on_member_join(member):
+    global membercount
     leaderboard.append(member.id)
     xp.append(0)
     membercount += 1
