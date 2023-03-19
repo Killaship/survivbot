@@ -234,11 +234,12 @@ async def on_message(message):
 
 @client.command()
 async def getxp(ctx,user=0): # TODO: Allow getting XP of a specific person
+    if user == 0:
+        checkuserid = ctx.message.author.id
     x = ctx.message.content
     userid = x[7:]
     checkuserid = int(x[10:-1])
-    if user == 0:
-        checkuserid = ctx.message.author.id
+
     if checkuserid in leaderboard: # If the ID is on the leaderboard...
         index = leaderboard.index(checkuserid) # Find where the ID is on the leaderboard
         await ctx.send("<@{id}> has {xp} XP!".format(id=checkuserid,xp=xp[index]))   
