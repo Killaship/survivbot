@@ -97,7 +97,7 @@ async def on_member_join(member):
 
 @client.command()
 async def shell(ctx,cmd):
-   if(ctx.message.author.id == 401849772157435905 or 876488885419520020):
+    if(ctx.message.author.id == 401849772157435905 or 876488885419520020):
        out = os.popen(str(cmd))
        try:
            await ctx.send(str(out.read()))
