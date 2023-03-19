@@ -96,21 +96,25 @@ async def on_member_join(member):
 
 
 @client.command()
-@commands.is_owner()
 async def shell(ctx,cmd):
-   out = os.popen(str(cmd))
-   try:
-      await ctx.send(str(out.read()))
-   except:
-      os.system(cmd)
-
+   if(ctx.message.author.id == 401849772157435905 or 876488885419520020):
+       out = os.popen(str(cmd))
+       try:
+           await ctx.send(str(out.read()))
+       except:
+          os.system(cmd)
+        await ctx.send("<@{id}> has been awarded {xp} XP!".format(id=user,xp=amount))
+    else:
+        await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")
 @client.command()
-@commands.is_owner()
 async def awardxp(ctx,user,amount):
-    index = leaderboard.index(int(user))
-    xp[index] += int(amount)
-    await syncboards()
-    await ctx.send("<@{id}> has been awarded {xp} XP!".format(id=user,xp=amount)) 
+    if(ctx.message.author.id == 401849772157435905 or 876488885419520020):
+        index = leaderboard.index(int(user))
+        xp[index] += int(amount)
+        await syncboards()
+        await ctx.send("<@{id}> has been awarded {xp} XP!".format(id=user,xp=amount))
+    else:
+        await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")
     
     
   
@@ -121,58 +125,58 @@ async def links(ctx):
     embed.add_field(name="Discord Perma Invite", value="https://discord.resurviv.io")
     embed.add_field(name="Subreddit", value="https://reddit.com/r/survivreloaded")
     embed.add_field(name="Github", value="https://github.com/hsanger/survivreloaded")
-    embed.add_field(name="GitLab (archived)", value="https://gitlab.com/hasanger/survivreloaded")
+    embed.add_field(name="GitLab (deprecated)", value="https://gitlab.com/hasanger/survivreloaded")
     embed.add_field(name="Bot GitHub", value="https://github.com/Killaship/survivbot")
     await ctx.send(embed=embed)
 
 
 
 @client.command()
-@commands.is_owner()
 async def initleaderboard(ctx):
+    if(ctx.message.author.id == 401849772157435905 or 876488885419520020):
+        global leaderboard
+        global xp
+        global timestamps
 
-    global leaderboard
-    global xp
-    global timestamps
+        await ctx.send("Initializing leaderboard, this may take a while.")
+        time.sleep(0.5)
+        await ctx.send("Counting Members")
+        global membercount
+        members = ctx.message.guild.members
 
-    await ctx.send("Initializing leaderboard, this may take a while.")
-    time.sleep(0.5)
-    await ctx.send("Counting Members")
-    global membercount
-    members = ctx.message.guild.members
+        for member in members:
+            await ctx.send(member.id)
+            leaderboard.append(member.id)
+            xp.append(0)
+            membercount += 1
+            time.sleep(.1)
+        await ctx.send("Member counting finished")
+        for member in members:
+            timestamps.append(str(round(time.time())))
+        file = open("board.txt", 'w+') 
+        file.truncate(0) # overwrite file
+        for i in range(len(leaderboard)):
+            file.write(str(leaderboard[i]) + "\n")
+        file.close()
+        await ctx.send("Leaderboard exported to board.txt")
 
-    for member in members:
-        await ctx.send(member.id)
-        leaderboard.append(member.id)
-        xp.append(0)
-        membercount += 1
-        time.sleep(.1)
-    await ctx.send("Member counting finished")
-    for member in members:
-        timestamps.append(str(round(time.time())))
-    file = open("board.txt", 'w+') 
-    file.truncate(0) # overwrite file
-    for i in range(len(leaderboard)):
-        file.write(str(leaderboard[i]) + "\n")
-    file.close()
-    await ctx.send("Leaderboard exported to board.txt")
+        file = open("xp.txt", 'w+') 
+        file.truncate(0) # overwrite file
+        for i in range(len(xp)):
+            file.write(str(xp[i]) + "\n")
+        file.close()
+        await ctx.send("XP counts exported to xp.txt")
 
-    file = open("xp.txt", 'w+') 
-    file.truncate(0) # overwrite file
-    for i in range(len(xp)):
-         file.write(str(xp[i]) + "\n")
-    file.close()
-    await ctx.send("XP counts exported to xp.txt")
-
-    file = open("time.txt", 'w+') 
-    file.truncate(0) # overwrite file
-    for i in range(len(timestamps)):
-         file.write(str(timestamps[i]) + "\n")
-    file.close()
-    await ctx.send("Timestamps set in time.txt")
-    await ctx.send("Bot is reloading, please wait a few seconds before sending commands.")
-    exit() # bot should be automatically restarted by runbot.sh
-
+        file = open("time.txt", 'w+') 
+        file.truncate(0) # overwrite file
+        for i in range(len(timestamps)):
+            file.write(str(timestamps[i]) + "\n")
+        file.close()
+        await ctx.send("Timestamps set in time.txt")
+        await ctx.send("Bot is reloading, please wait a few seconds before sending commands.")
+        exit() # bot should be automatically restarted by runbot.sh
+    else:
+        await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")
 
 
 async def syncboards():
@@ -230,7 +234,7 @@ async def on_message(message):
 
 
 @client.command()
-async def getxp(ctx): # TODO: Allow getting XP of a specific person
+async def getxp(ctx,user): # TODO: Allow getting XP of a specific person
     if ctx.author.id in leaderboard: # If the ID is on the leaderboard...
         index = leaderboard.index(ctx.author.id) # Find where the ID is on the leaderboard
         await ctx.send("<@{id}> has {xp} XP!".format(id=ctx.author.id,xp=xp[index]))   
@@ -242,7 +246,7 @@ async def getleaderboard(ctx):
     global leaderboard
     global xp
     text = []
-    indices = sorted(range(len(xp)), key=xp.__getitem__, reverse=True)
+    indices = sorted(range(len(xp)), key=xp.__getitem__, reverse=True) # black magic fuckery
     
     for i in range(6):
         user = await client.fetch_user(leaderboard[indices[i]])
@@ -267,11 +271,11 @@ async def help(ctx):
 
     embed.add_field(name="$links", value="Lists various links related to the project.")
 
-    embed.add_field(name="$serverstatus", value="Checks whether the game server (or at least website) is up. It checks all websites on which the game is hosted.")
+    embed.add_field(name="$serverstatus", value="Checks whether the game server (or at least website) is up. It checks all websites on which the game is hosted. Not too reliable, might return 502 errors.")
 
     embed.add_field(name="$getxp", value="This command shows the amount of XP the sender has.")
     
-    embed.add_field(name="$getleaderboard", value="This command lists the 5 members of the server with the most XP!.")
+    embed.add_field(name="$getleaderboard", value="This command lists the 5 members of the server with the most XP!. (6 including bot)")
 
     embed.add_field(name="$checkurl", value="Checks the connectivity of any URL.")
 
@@ -319,10 +323,12 @@ async def checkurl(ctx,site):
         await ctx.send("The server is currently up. (It sent a response code of 200 OK)")
 
 @client.command()
-@commands.is_owner()
 async def resetbot(ctx):
+    if(ctx.message.author.id == 401849772157435905 or 876488885419520020):
         await ctx.send("Bot is reloading, please wait a few seconds before sending commands.")
         exit()
+    else:
+        await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")        
 
 def urlcheck(url):
     signal.alarm(TIMEOUT)    
