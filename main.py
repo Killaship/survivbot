@@ -169,6 +169,8 @@ async def initleaderboard(ctx):
          file.write(str(timestamps[i]) + "\n")
     file.close()
     await ctx.send("Timestamps set in time.txt")
+    await ctx.send("Bot is reloading, please wait a few seconds before sending commands.")
+    exit() # bot should be automatically restarted by runbot.sh
 
 
 
