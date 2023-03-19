@@ -85,7 +85,14 @@ async def on_ready():
     #print(timestamps)
 
 
-
+@client.event
+async def on_member_join(member):
+    leaderboard.append(member.id)
+    xp.append(0)
+    membercount += 1
+    time.sleep(.1)
+    timestamps.append(str(round(time.time()))) 
+    await syncboards()
 
 
 @client.command()
