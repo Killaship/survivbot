@@ -235,7 +235,7 @@ async def on_message(message):
 
 
 @client.command()
-async def getxp(ctx,user="0"): # TODO: Allow getting XP of a specific person
+async def getxp(ctx,user="0"): 
     checkuserid = "0"
     if user == "0":
         checkuserid = str(ctx.message.author.id)
