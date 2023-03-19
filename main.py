@@ -233,12 +233,15 @@ async def on_message(message):
 
 
 @client.command()
-async def getxp(ctx,user): # TODO: Allow getting XP of a specific person
-    if ctx.author.id in leaderboard: # If the ID is on the leaderboard...
-        index = leaderboard.index(ctx.author.id) # Find where the ID is on the leaderboard
-        await ctx.send("<@{id}> has {xp} XP!".format(id=ctx.author.id,xp=xp[index]))   
+async def getxp(ctx,user=message.author.id): # TODO: Allow getting XP of a specific person
+    x = message.content
+    userid = x[7:]
+    checkuserid = int(x[10:-1])
+    if checkuserid in leaderboard: # If the ID is on the leaderboard...
+        index = leaderboard.index(checkuserid) # Find where the ID is on the leaderboard
+        await ctx.send("<@{id}> has {xp} XP!".format(id=checkuserid,xp=xp[index]))   
     else:
-        await ctx.send("Error! <@{userid}> is not on the leaderboard. :/".format(userid=ctx.author.id))
+        await ctx.send("Error! <@{userid}> is not on the leaderboard. :/".format(userid=checkuserid))
 
 @client.command()
 async def getleaderboard(ctx):
