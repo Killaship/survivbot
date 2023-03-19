@@ -235,10 +235,10 @@ async def on_message(message):
 
 @client.command()
 async def getxp(ctx,user=0): # TODO: Allow getting XP of a specific person
-    
+    checkuserid = 0
     if user == 0:
         checkuserid = ctx.message.author.id
-    ''.join(checkuserid for checkuserid in user if checkuserid in digits)
+    int(''.join(c for c in user if c.isdigit())
 
     if checkuserid in leaderboard: # If the ID is on the leaderboard...
         index = leaderboard.index(checkuserid) # Find where the ID is on the leaderboard
