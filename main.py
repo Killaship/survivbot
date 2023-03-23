@@ -244,7 +244,7 @@ async def getxp(ctx,user="0"):
         checkuserid = str(''.join(c for c in user if c.isdigit()))
         
     print(checkuserid)
-    
+    await ctx.send("debug: {board}".format(board=str(leaderboard)))
     if checkuserid in leaderboard: # If the ID is on the leaderboard...
         index = leaderboard.index(checkuserid.strip()) # Find where the ID is on the leaderboard
         await ctx.send("<@{id}> has {xp} XP!".format(id=checkuserid.strip(),xp=xp[index]))   
