@@ -175,8 +175,6 @@ async def initleaderboard(ctx):
             file.write(str(timestamps[i]) + "\n")
         file.close()
         await ctx.send("Timestamps set in time.txt")
-        await ctx.send("Bot is reloading, please wait a few seconds before sending commands.")
-        #exit() # bot should be automatically restarted by runbot.sh
     else:
         await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")
 
@@ -242,6 +240,7 @@ async def getxp(ctx,user="0"):
         checkuserid = str(ctx.message.author.id)
     else:
         checkuserid = str(''.join(c for c in user if c.isdigit()))
+    print(checkuserid)
     
     if checkuserid in leaderboard: # If the ID is on the leaderboard...
         index = leaderboard.index(checkuserid) # Find where the ID is on the leaderboard
