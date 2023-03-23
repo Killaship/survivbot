@@ -147,10 +147,9 @@ async def initleaderboard(ctx):
         i = 0
         for member in members:
             i++
-            await ctx.send("{id} ({count})".format(id=member.id, count=str(i)))
+            await ctx.send("{id}    ({count})".format(id=member.id, count=str(i)))
             leaderboard.append(member.id)
             xp.append(0)
-            membercount += 1
             time.sleep(.1)
         i = 0
         await ctx.send("Member counting finished")
@@ -177,7 +176,7 @@ async def initleaderboard(ctx):
         file.close()
         await ctx.send("Timestamps set in time.txt")
         await ctx.send("Bot is reloading, please wait a few seconds before sending commands.")
-        exit() # bot should be automatically restarted by runbot.sh
+        #exit() # bot should be automatically restarted by runbot.sh
     else:
         await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")
 
