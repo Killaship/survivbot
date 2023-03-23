@@ -146,7 +146,7 @@ async def initleaderboard(ctx):
         members = ctx.message.guild.members
         i = 0
         for member in members:
-            i++
+            i += 1
             await ctx.send("{id}    ({count})".format(id=member.id, count=str(i)))
             leaderboard.append(member.id)
             xp.append(0)
