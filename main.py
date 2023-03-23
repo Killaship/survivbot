@@ -235,6 +235,8 @@ async def on_message(message):
 
 @client.command()
 async def getxp(ctx,user="0"): 
+    global leaderboard
+    global xp
     checkuserid = "0"
     if user == "0":
         checkuserid = str(ctx.message.author.id)
