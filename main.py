@@ -144,13 +144,15 @@ async def initleaderboard(ctx):
         await ctx.send("Counting Members")
         global membercount
         members = ctx.message.guild.members
-
+        i = 0
         for member in members:
-            await ctx.send(member.id)
+            i++
+            await ctx.send("{id} ({count})".format(id=member.id, count=str(i)))
             leaderboard.append(member.id)
             xp.append(0)
             membercount += 1
             time.sleep(.1)
+        i = 0
         await ctx.send("Member counting finished")
         for member in members:
             timestamps.append(str(round(time.time())))
