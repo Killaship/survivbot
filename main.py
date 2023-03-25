@@ -232,7 +232,7 @@ async def on_message(message):
     
 
 def debugxp(checkuserid):
-    index = leaderboard.index(checkuserid.strip()) # Find where the ID is on the leaderboard
+    index = leaderboard.index(int(checkuserid.strip())) # Find where the ID is on the leaderboard
     print("<@{id}> has {xp} XP!".format(id=int(checkuserid.strip()),xp=xp[index]))   
 
 @client.command()
