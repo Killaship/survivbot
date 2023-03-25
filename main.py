@@ -231,9 +231,6 @@ async def on_message(message):
         await client.process_commands(message) # Lets bot process other commands after event is done       
     
 
-def debugxp(checkuserid):
-    index = leaderboard.index(int(checkuserid.strip())) # Find where the ID is on the leaderboard
-    print("<@{id}> has {xp} XP!".format(id=int(checkuserid.strip()),xp=xp[index]))   
 
 @client.command()
 async def getxp(ctx,user="0"): 
@@ -246,8 +243,8 @@ async def getxp(ctx,user="0"):
         checkuserid = str(''.join(c for c in user if c.isdigit()))
     debugxp(checkuserid)
     if checkuserid.strip() in leaderboard: # If the ID is on the leaderboard...
-        index = leaderboard.index(checkuserid.strip()) # Find where the ID is on the leaderboard
-        await ctx.send("<@{id}> has {xp} XP!".format(id=int(checkuserid.strip()),xp=xp[index]))   
+        index = leaderboard.index(int(checkuserid.strip())) # Find where the ID is on the leaderboard
+        print("<@{id}> has {xp} XP!".format(id=int(checkuserid.strip()),xp=xp[index])) 
     else:
         await ctx.send("Error! <@{userid}> is not on the leaderboard. :/".format(userid=checkuserid.strip()))
 
