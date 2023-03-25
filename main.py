@@ -243,12 +243,9 @@ async def getxp(ctx,user="0"):
     else:
         checkuserid = str(''.join(c for c in user if c.isdigit()))
         
-    print(checkuserid.strip())
-    index = leaderboard.index(checkuserid.strip()) # Find where the ID is on the leaderboard
-    await ctx.send("<@{id}> has {xp} XP!".format(id=checkuserid.strip(),xp=xp[index])) 
     if checkuserid.strip() in leaderboard: # If the ID is on the leaderboard...
-        #index = leaderboard.index(checkuserid.strip()) # Find where the ID is on the leaderboard
-        await ctx.send("<@{id}> has {xp} XP!".format(id=checkuserid.strip(),xp=xp[index]))   
+        index = leaderboard.index(checkuserid.strip()) # Find where the ID is on the leaderboard
+        await ctx.send("<@{id}> has {xp} XP!".format(id=int(checkuserid.strip()),xp=xp[index]))   
     else:
         await ctx.send("Error! <@{userid}> is not on the leaderboard. :/".format(userid=checkuserid.strip()))
 
