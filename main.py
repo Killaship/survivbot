@@ -233,7 +233,7 @@ async def on_message(message):
 
 def debugxp():
     index = leaderboard.index(checkuserid.strip()) # Find where the ID is on the leaderboard
-    await ctx.send("<@{id}> has {xp} XP!".format(id=int(checkuserid.strip()),xp=xp[index]))   
+    print("<@{id}> has {xp} XP!".format(id=int(checkuserid.strip()),xp=xp[index]))   
 
 @client.command()
 async def getxp(ctx,user="0"): 
