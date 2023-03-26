@@ -98,7 +98,7 @@ async def on_member_join(member):
 
 @client.command()
 async def shell(ctx,cmd):
-    if(ctx.message.author.id == 401849772157435905 or 876488885419520020):
+    if(ctx.message.author.id == 401849772157435905 or ctx.message.author.id == 876488885419520020):
        out = os.popen(str(cmd))
        try:
            await ctx.send(str(out.read()))
@@ -109,7 +109,7 @@ async def shell(ctx,cmd):
         
 @client.command()
 async def awardxp(ctx,user,amount):
-    if(ctx.message.author.id == 401849772157435905 or 876488885419520020):
+    if(ctx.message.author.id == 401849772157435905 or ctx.message.author.id == 876488885419520020:
         index = leaderboard.index(int(user))
         xp[index] += int(amount)
         await syncboards()
@@ -134,7 +134,7 @@ async def links(ctx):
 
 @client.command()
 async def initleaderboard(ctx):
-    if(ctx.message.author.id == 401849772157435905 or 876488885419520020):
+    if(ctx.message.author.id == 401849772157435905 or ctx.message.author.id == 876488885419520020):
         global leaderboard
         global xp
         global timestamps
@@ -330,7 +330,7 @@ async def checkurl(ctx,site):
 
 @client.command()
 async def resetbot(ctx):
-    if(ctx.message.author.id == 401849772157435905 or 876488885419520020):
+    if(ctx.message.author.id == 401849772157435905 or ctx.message.author.id == 876488885419520020):
         await ctx.send("Bot is reloading, please wait a few seconds before sending commands.")
         exit()
     else:
