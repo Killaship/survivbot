@@ -109,7 +109,7 @@ async def shell(ctx,cmd):
         
 @client.command()
 async def awardxp(ctx,user,amount):
-    if(ctx.message.author.id == 401849772157435905 or ctx.message.author.id == 876488885419520020:
+    if(ctx.message.author.id == 401849772157435905 or ctx.message.author.id == 876488885419520020):
         index = leaderboard.index(int(user))
         xp[index] += int(amount)
         await syncboards()
