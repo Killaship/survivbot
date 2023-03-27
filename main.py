@@ -304,30 +304,33 @@ async def help(ctx):
 
 @client.command()
 async def serverstatus(ctx):
-    await ctx.send("Checking 3 site(s)") # todo: make this into a for loop that reads from an array
-    await ctx.send("Note: This may or may not be accurate. Do not trust these results.")
-    await ctx.send("*https://taskjourney.org:449*")
+    text = []
+    text.append("Checking 3 site(s)") # todo: make this into a for loop that reads from an array
+    text.append("Note: This may or may not be accurate. Do not trust these results.")
+    text.append("*https://taskjourney.org:449*")
     code = urlcheck("https://taskjourney.org:449/")
     if(code != 200):
-        await ctx.send("The server is currently down or unresponsive. The HTTP code sent was: {http}. ({phrase})".format(http=str(code), phrase=httplist[code]))
+        text.append("The server sent an abnormal response. If it's 301 or 302, the server redirected the bot. If it's not those, the server might be down. The HTTP code sent was: {http}. ({phrase})".format(http=str(code), phrase=httplist[code]))
     else:
-        await ctx.send("The server is currently up. (It sent a response code of 200 OK)")
-        await ctx.send("If your game is frozen, it's most likely that the client froze or crashed. The game is still relatively unstable, you'll have to reload the game.")
+        text.append("The server is currently up. (It sent a response code of 200 OK)")
+        text.append("If your game is frozen, it's most likely that the client froze or crashed. The game is still relatively unstable, you'll have to reload the game.")
         code = urlcheck("https://survivreloaded.com/")
-    await ctx.send("*https://survivreloaded.com/*")
+    text.append("*https://survivreloaded.com/*")
     code = urlcheck("https://survivreloaded.com/")
     if(code != 200):
-        await ctx.send("The server is currently down or unresponsive. The HTTP code sent was: {http}. ({phrase})".format(http=str(code), phrase=httplist[code]))
+        text.append("The server sent an abnormal response. If it's 301 or 302, the server redirected the bot. If it's not those, the server might be down. The HTTP code sent was: {http}. ({phrase})".format(http=str(code), phrase=httplist[code]))
     else:
-        await ctx.send("The server is currently up. (It sent a response code of 200 OK)")
-        await ctx.send("If your game is frozen, it's most likely that the client froze or crashed. The game is still relatively unstable, you'll have to reload the game.")  
+        text.append("The server is currently up. (It sent a response code of 200 OK)")
+        text.append("If your game is frozen, it's most likely that the client froze or crashed. The game is still relatively unstable, you'll have to reload the game.")  
     code = urlcheck("https://resurviv.io/")
-    await ctx.send("*https://resurviv.io/*")
+    text.append("*https://resurviv.io/*")
     if(code != 200):
-        await ctx.send("The server is currently down or unresponsive. The HTTP code sent was: {http}. ({phrase})".format(http=str(code), phrase=httplist[code]))
+        text.append("The server sent an abnormal response. If it's 301 or 302, the server redirected the bot. If it's not those, the server might be down. The HTTP code sent was: {http}. ({phrase})".format(http=str(code), phrase=httplist[code]))
     else:
-        await ctx.send("The server is currently up. (It sent a response code of 200 OK)")
-        await ctx.send("If your game is frozen, it's most likely that the client froze or crashed. The game is still relatively unstable, you'll have to reload the game.")
+        text.append("The server is currently up. (It sent a response code of 200 OK)")
+        text.append("If your game is frozen, it's most likely that the client froze or crashed. The game is still relatively unstable, you'll have to reload the game.")
+    embed = discord.Embed(title=''.join(text), description="Surviv Reloaded site statuses", color=0x00FF00)
+    await ctx.send(embed=embed)
 
 
 @client.command()
