@@ -10,7 +10,7 @@ digits = frozenset(digits) # we don't need to change digits, and this should mak
 owners = [401849772157435905, 876488885419520020] # Owner account IDs
 bottoken = open("token.txt","r").readline()
 print(bottoken.strip())
-
+leaderboardfailsafe = 0
 membercount=0
 totalmessages=0 # total number of messages since bot turned on
 data=open('httplist.py','r+').read()
