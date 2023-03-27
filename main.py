@@ -133,21 +133,27 @@ async def links(ctx):
 
 
 @client.command()
-async def initleaderboard(ctx):
+async def initleaderboard(ctx, debug):
+    global leaderboardfailsafe
+    if(leaderboardfailsafe != 0):
+        print("Leaderboard failsafe value = {val}. It should equal zero. This means that the leaderboard is still in progress of initalizing. Wait until it's done!")
+        return
+    leaderboardfailsafe = 1
     if(ctx.message.author.id in owners):
         global leaderboard
         global xp
         global timestamps
 
-        await ctx.send("Initializing leaderboard, this may take a while.")
+        await ctx.send("Initializing leaderboard, this may take a while, especially if dumping IDs is enabled!")
         time.sleep(0.5)
-        await ctx.send("Counting Members")
+        await ctx.send("Counting Members     {timestamp}".format(timestamp=now.strftime("%H:%M:%S")))
         global membercount
         members = ctx.message.guild.members
         i = 0
         for member in members:
             i += 1
-            await ctx.send("{id}    ({count})".format(id=member.id, count=str(i)))
+            if(debug == "dump"):
+                await ctx.send("{id}    ({count}  {timestamp})".format(id=member.id, count=str(i), timestamp=now.strftime("%H:%M:%S")))
             leaderboard.append(member.id)
             xp.append(0)
             time.sleep(.1)
@@ -175,8 +181,12 @@ async def initleaderboard(ctx):
             file.write(str(timestamps[i]) + "\n")
         file.close()
         await ctx.send("Timestamps set in time.txt")
+        print("Leaderboard Initialized! ({timestamp})".format(timestamp=now.strftime("%H:%M:%S")))
+        leaderboardfailsafe = 0
     else:
         await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")
+        leaderboardfailsafe = 0
+        return
 
 
 async def syncboards():
