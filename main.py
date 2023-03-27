@@ -136,7 +136,7 @@ async def links(ctx):
 async def initleaderboard(ctx, debug="chicken_nuggets"):
     global leaderboardfailsafe
     if(leaderboardfailsafe != 0):
-        print("Leaderboard failsafe value = {val}. It should equal zero. This means that the leaderboard is still in progress of initalizing. Wait until it's done!")
+        await ctx.send("Leaderboard failsafe value = {val}. It should equal zero. This means that the leaderboard is still in progress of initalizing. Wait until it's done!")
         return
     leaderboardfailsafe = 1
     if(ctx.message.author.id in owners):
@@ -146,14 +146,14 @@ async def initleaderboard(ctx, debug="chicken_nuggets"):
 
         await ctx.send("Initializing leaderboard, this may take a while, especially if dumping IDs is enabled!")
         time.sleep(0.5)
-        await ctx.send("Counting Members     {timestamp}".format(timestamp=time.time()))
+        await ctx.send("Counting Members     {timestamp}".format(timestamp=round(time.time())))
         global membercount
         members = ctx.message.guild.members
         i = 0
         for member in members:
             i += 1
             if(debug == "dump"):
-                await ctx.send("{id}    ({count}  {timestamp})".format(id=member.id, count=str(i), timestamp=time.time()))
+                await ctx.send("{id}    ({count}  {timestamp})".format(id=member.id, count=str(i), timestamp=round(time.time())))
             leaderboard.append(member.id)
             xp.append(0)
             time.sleep(.1)
@@ -181,7 +181,7 @@ async def initleaderboard(ctx, debug="chicken_nuggets"):
             file.write(str(timestamps[i]) + "\n")
         file.close()
         await ctx.send("Timestamps set in time.txt")
-        print("Leaderboard Initialized! ({timestamp})".format(timestamp=time.time()))
+        await ctx.send("Leaderboard Initialized! ({timestamp})".format(timestamp=round(time.time()))))
         leaderboardfailsafe = 0
     else:
         await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")
