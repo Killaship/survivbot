@@ -181,7 +181,7 @@ async def initleaderboard(ctx, debug="chicken_nuggets"):
             file.write(str(timestamps[i]) + "\n")
         file.close()
         await ctx.send("Timestamps set in time.txt")
-        await ctx.send("Leaderboard Initialized! ({timestamp})".format(timestamp=round(time.time()))))
+        await ctx.send("Leaderboard Initialized! ({timestamp})".format(timestamp=round(time.time())))
         leaderboardfailsafe = 0
     else:
         await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")
