@@ -329,7 +329,7 @@ async def serverstatus(ctx):
     else:
         text.append("The server is currently up. (It sent a response code of 200 OK)")
         text.append("If your game is frozen, it's most likely that the client froze or crashed. The game is still relatively unstable, you'll have to reload the game.")
-    embed = discord.Embed(title="Surviv Reloaded Status"), description=''.join(text), color=0x00FF00)
+    embed = discord.Embed(title="Surviv Reloaded Status", description=''.join(text), color=0x00FF00)
     await ctx.send(embed=embed)
 
 
