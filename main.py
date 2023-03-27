@@ -153,7 +153,7 @@ async def initleaderboard(ctx, debug="chicken_nuggets"):
         for member in members:
             i += 1
             if(debug == "dump"):
-                await ctx.send("{id}    ({count}  {timestamp})".format(id=member.id, count=str(i), timestamp=ime.time()))
+                await ctx.send("{id}    ({count}  {timestamp})".format(id=member.id, count=str(i), timestamp=time.time()))
             leaderboard.append(member.id)
             xp.append(0)
             time.sleep(.1)
@@ -181,7 +181,7 @@ async def initleaderboard(ctx, debug="chicken_nuggets"):
             file.write(str(timestamps[i]) + "\n")
         file.close()
         await ctx.send("Timestamps set in time.txt")
-        print("Leaderboard Initialized! ({timestamp})".format(timestamp=ime.time()))
+        print("Leaderboard Initialized! ({timestamp})".format(timestamp=time.time()))
         leaderboardfailsafe = 0
     else:
         await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")
