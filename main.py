@@ -136,7 +136,7 @@ async def links(ctx):
 async def initleaderboard(ctx, debug="chicken_nuggets"):
     global leaderboardfailsafe
     if(leaderboardfailsafe != 0):
-        await ctx.send("Leaderboard failsafe value = {val}. It should equal zero. This means that the leaderboard is still in progress of initalizing. Wait until it's done!")
+        await ctx.send("Leaderboard failsafe value = {val}. It should equal zero. This means that the leaderboard is still in progress of initalizing. Wait until it's done!".format(val=leaderboardfailsafe))
         return
     leaderboardfailsafe = 1
     if(ctx.message.author.id in owners):
