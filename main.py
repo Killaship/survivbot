@@ -8,7 +8,7 @@ import random
 import time
 from string import digits
 digits = frozenset(digits) # we don't need to change digits, and this should make things ever-so-slightly faster
-
+owners = [401849772157435905, 876488885419520020] # Owner account IDs
 bottoken = open("token.txt","r").readline()
 print(bottoken.strip())
 
@@ -98,7 +98,7 @@ async def on_member_join(member):
 
 @client.command()
 async def shell(ctx,cmd):
-    if(ctx.message.author.id == 401849772157435905 or ctx.message.author.id == 876488885419520020):
+    if(ctx.message.author.id in owners):
        out = os.popen(str(cmd))
        try:
            await ctx.send(str(out.read()))
@@ -109,7 +109,7 @@ async def shell(ctx,cmd):
         
 @client.command()
 async def awardxp(ctx,user,amount):
-    if(ctx.message.author.id == 401849772157435905 or ctx.message.author.id == 876488885419520020):
+    if(ctx.message.author.id in owners):
         index = leaderboard.index(int(user))
         xp[index] += int(amount)
         await syncboards()
@@ -134,7 +134,7 @@ async def links(ctx):
 
 @client.command()
 async def initleaderboard(ctx):
-    if(ctx.message.author.id == 401849772157435905 or ctx.message.author.id == 876488885419520020):
+    if(ctx.message.author.id in owners):
         global leaderboard
         global xp
         global timestamps
@@ -330,12 +330,21 @@ async def checkurl(ctx,site):
 
 @client.command()
 async def resetbot(ctx):
-    if(ctx.message.author.id == 401849772157435905 or ctx.message.author.id == 876488885419520020):
+    if(ctx.message.author.id in owners):
         await ctx.send("Bot is reloading, please wait a few seconds before sending commands.")
         exit()
     else:
         await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")        
 
+@client.command()
+async def ownersonly(ctx):
+    if(ctx.message.author.id in owners):
+        await ctx.send("You are the owner of this application.")
+        exit()
+    else:
+        await ctx.send("You're not the owner of this application.")         
+        
+        
 def urlcheck(url):
     signal.alarm(TIMEOUT)    
     try:
