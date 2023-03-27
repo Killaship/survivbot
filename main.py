@@ -146,14 +146,14 @@ async def initleaderboard(ctx, debug):
 
         await ctx.send("Initializing leaderboard, this may take a while, especially if dumping IDs is enabled!")
         time.sleep(0.5)
-        await ctx.send("Counting Members     {timestamp}".format(timestamp=now.strftime("%H:%M:%S")))
+        await ctx.send("Counting Members     {timestamp}".format(timestamp=time.time()))
         global membercount
         members = ctx.message.guild.members
         i = 0
         for member in members:
             i += 1
             if(debug == "dump"):
-                await ctx.send("{id}    ({count}  {timestamp})".format(id=member.id, count=str(i), timestamp=now.strftime("%H:%M:%S")))
+                await ctx.send("{id}    ({count}  {timestamp})".format(id=member.id, count=str(i), timestamp=ime.time()))
             leaderboard.append(member.id)
             xp.append(0)
             time.sleep(.1)
@@ -181,7 +181,7 @@ async def initleaderboard(ctx, debug):
             file.write(str(timestamps[i]) + "\n")
         file.close()
         await ctx.send("Timestamps set in time.txt")
-        print("Leaderboard Initialized! ({timestamp})".format(timestamp=now.strftime("%H:%M:%S")))
+        print("Leaderboard Initialized! ({timestamp})".format(timestamp=ime.time()))
         leaderboardfailsafe = 0
     else:
         await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")
