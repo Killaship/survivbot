@@ -30,8 +30,6 @@ signal.signal(signal.SIGALRM, timeout_handler)
 
 
 
-key=os.getenv('key')
-wkey=os.getenv('wkey')
 
 intents = discord.Intents.default()
 intents.members = True
@@ -39,7 +37,7 @@ intents.members = True
 client = discord.Client() #declaring what the client is.
 
 client = commands.Bot(command_prefix = '$', intents=intents)#Makes the bot prefix.
-client.remove_command('help')#Removes the auto help command as it can be buggy.
+client.remove_command('help')#Removes the auto help command as it can be buggy. (edit in 2023: why is this here?)
 
     # https://discord.com/api/oauth2/authorize?client_id=1079242361491693658&permissions=8&scope=applications.commands%20bot
 
