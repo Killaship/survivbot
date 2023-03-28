@@ -14,7 +14,7 @@ import time
 
 import httplist
 
-owners = ['401849772157435905', '876488885419520020'] # Owner account IDs
+owners = [401849772157435905, 876488885419520020] # Owner account IDs
 
 
 with open('token.txt', 'r') as f:
@@ -68,7 +68,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
     global totalmessages
-    if message.author.id not in userdata:
+    if message.author.id not in userdata.keys():
         userdata[message.author.id] = {'xp': 0, 'time': -1}
     if userdata[message.author.id]['time'] + 30 < time.time():
         userdata[message.author.id]['time'] = time.time()
