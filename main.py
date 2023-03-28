@@ -1,45 +1,83 @@
+import asyncio
+import sys
+
 import discord
 from discord.ext import commands, tasks
+
+import ast
 import os
 import requests
 import signal
 import random
 import time
-from string import digits
-digits = frozenset(digits) # we don't need to change digits, and this should make things ever-so-slightly faster
+
+import httplist
+
 owners = [401849772157435905, 876488885419520020] # Owner account IDs
-bottoken = open("token.txt","r").readline()
-print(bottoken.strip())
-leaderboardfailsafe = 0
-membercount=0
-totalmessages=0 # total number of messages since bot turned on
-data=open('httplist.py','r+').read()
-exec(data)
-leaderboard = []
-xp = []
-timestamps = []
 
-class TimeoutException(Exception):   # Custom exception class
-    print("bot timed out")
 
-def timeout_handler(signum, frame):   # Custom signal handler (this is where OSdev IDT knowledge is relatable :p)
-    raise TimeoutException
+with open('token.txt', 'r') as f:
+    bottoken = f.readline().strip()
 
-# Change the behavior of SIGALRM to call the timeout handler
+totalmessages = 0
+
+
+with open('userdata.txt', 'r') as f:
+    userdata = ast.literal_eval(f.read())
+
+
+def save_all():
+    with open('userdata.txt', 'w') as f:
+        f.write(repr(userdata))
+
+
+def timeout_handler(signal, frame):
+    print(f'BOT: Timeout! Saving data and exiting...')
+    save_all()
+    sys.exit(0)
+
+
 signal.signal(signal.SIGALRM, timeout_handler)
-
 
 
 
 intents = discord.Intents.default()
 intents.members = True
 
-client = discord.Client() #declaring what the client is.
-
-client = commands.Bot(command_prefix = '$', intents=intents)#Makes the bot prefix.
-client.remove_command('help')#Removes the auto help command as it can be buggy. (edit in 2023: why is this here?)
+client = commands.Bot(command_prefix = '$', help_command=None, intents=intents) #Makes the bot prefix.
 
     # https://discord.com/api/oauth2/authorize?client_id=1079242361491693658&permissions=8&scope=applications.commands%20bot
+
+class LeaderBoardPosition:
+    def __init__(self, user, xp):
+        self.user = user
+        self.xp = xp
+
+@client.event
+async def on_ready():
+    print("========")
+    print(f"current UNIX time is {time.time()}.")
+    print("========")
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('========')
+
+
+@client.event
+async def on_message(message):
+    global totalmessages
+    if message.author.id not in userdata:
+        userdata[message.author.id] = {'xp': 0, 'time': -1}
+    if userdata[message.author.id]['time'] + 30 < time.time():
+        userdata[message.author.id]['time'] = time.time()
+        userdata[message.author.id]['xp'] += random.randint(5, 10)
+    totalmessages += 1
+
+    save_all()
+
+    await client.process_commands(message)
+
 
 @client.command()
 async def explain(ctx):
@@ -48,71 +86,26 @@ async def explain(ctx):
     embed.add_field(name="What is this bot?", value="This bot was made by Killaship to save the hassle of explaining what this is to everyone.")
     embed.add_field(name="What is Surviv Reloaded?", value="It's an open-source server hosting the original client. In other words, it's the original surviv.io, just hosted by a different server. It's not a clone of Surviv.io.")
     embed.add_field(name="Where can I get more info?", value="https://github.com/SurvivReloaded")
-    await ctx.send(embed=embed)#sends the embed.
-
-@client.event
-async def on_ready():
-    global timestamps
-    global leaderboard
-    global xp
-    print("========")
-    print("current UNIX time is {time}.".format(time=int(time.time())))
-    print("========")
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('========')
-    print("reloading XP, timestamps, and boards")
-    with open("board.txt") as file:
-        leaderboard = file.read().splitlines()
-        leaderboard = [int(i) for i in leaderboard]
-        file.close()
-    with open("xp.txt") as file:
-        xp = file.read().splitlines()
-        xp = [int(i) for i in xp]
-        file.close()
-    with open("time.txt") as file:
-        timestamps = file.read().splitlines()
-        timestamps = [int(i) for i in timestamps]
-        file.close()
-    print("done")
-    print("========")
-    #print(leaderboard)
-    #print(xp)
-    #print(timestamps)
-
-
-@client.event
-async def on_member_join(member):
-    global membercount
-    leaderboard.append(member.id)
-    xp.append(0)
-    membercount += 1
-    time.sleep(.1)
-    timestamps.append(str(round(time.time()))) 
-    await syncboards()
+    await ctx.send(embed=embed)
 
 
 @client.command()
 async def shell(ctx,cmd):
-    if(ctx.message.author.id in owners):
+    if ctx.author.id in owners:
        out = os.popen(str(cmd))
        try:
            await ctx.send(str(out.read()))
        except:
           os.system(cmd)
-    else:
-        await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")
-        
+
+
 @client.command()
-async def awardxp(ctx,user,amount):
-    if(ctx.message.author.id in owners):
-        index = leaderboard.index(int(user))
-        xp[index] += int(amount)
-        await syncboards()
-        await ctx.send("<@{id}> has been awarded {xp} XP!".format(id=user,xp=amount))
-    else:
-        await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")
+async def awardxp(ctx, user: discord.User, amount = 0):
+    if ctx.message.author.id in owners:
+        if user.id not in userdata:
+            userdata[user.id] = {'xp': 0, 'time': -1}
+        userdata[user.id]['xp'] += amount
+        await ctx.send(f'Gave {user.mention} {amount} XP!')
     
     
   
@@ -129,146 +122,27 @@ async def links(ctx):
     await ctx.send(embed=embed)
 
 
-
 @client.command()
-async def initleaderboard(ctx, debug="chicken_nuggets"):
-    global leaderboardfailsafe
-    if(leaderboardfailsafe != 0):
-        await ctx.send("Leaderboard failsafe value = {val}. It should equal zero. This means that the leaderboard is still in progress of initalizing. Wait until it's done!".format(val=leaderboardfailsafe))
-        return
-    leaderboardfailsafe = 1
-    if(ctx.message.author.id in owners):
-        global leaderboard
-        global xp
-        global timestamps
+async def getxp(ctx, user: discord.User = None):
+    user = ctx.author if not user else user
+    if user.id not in userdata:
+        await ctx.send(f'{user.mention} has 0 XP!')
+    await ctx.send(f'{user.mention} has {userdata[ctx.message.author.id]["xp"]} XP!')
 
-        await ctx.send("Initializing leaderboard, this may take a while, especially if dumping IDs is enabled!")
-        time.sleep(0.5)
-        await ctx.send("Counting Members     {timestamp}".format(timestamp=round(time.time())))
-        global membercount
-        members = ctx.message.guild.members
-        i = 0
-        for member in members:
-            i += 1
-            if(debug == "dump"):
-                await ctx.send("{id}    ({count}  {timestamp})".format(id=member.id, count=str(i), timestamp=round(time.time())))
-            leaderboard.append(member.id)
-            xp.append(0)
-            time.sleep(.1)
-        i = 0
-        await ctx.send("Member counting finished")
-        for member in members:
-            timestamps.append(str(round(time.time())))
-        file = open("board.txt", 'w+') 
-        file.truncate(0) # overwrite file
-        for i in range(len(leaderboard)):
-            file.write(str(leaderboard[i]) + "\n")
-        file.close()
-        await ctx.send("Leaderboard exported to board.txt")
-
-        file = open("xp.txt", 'w+') 
-        file.truncate(0) # overwrite file
-        for i in range(len(xp)):
-            file.write(str(xp[i]) + "\n")
-        file.close()
-        await ctx.send("XP counts exported to xp.txt")
-
-        file = open("time.txt", 'w+') 
-        file.truncate(0) # overwrite file
-        for i in range(len(timestamps)):
-            file.write(str(timestamps[i]) + "\n")
-        file.close()
-        await ctx.send("Timestamps set in time.txt")
-        await ctx.send("Leaderboard Initialized! ({timestamp})".format(timestamp=round(time.time())))
-        leaderboardfailsafe = 0
-    else:
-        await ctx.send("hey, wait a minute, you're not the owner! you can't do that! >:(")
-        leaderboardfailsafe = 0
-        return
-
-
-async def syncboards():
-    global leaderboard
-    global timestamps
-    global xp
-    file = open("board.txt", 'w+') 
-    file.truncate(0) # overwrite file
-    for i in range(len(leaderboard)):
-
-        file.write(str(leaderboard[i]) + "\n")
-    file.close()
-
-    file = open("xp.txt", 'w+') 
-    file.truncate(0) # overwrite file
-    for i in range(len(xp)):
-         file.write(str(xp[i]) + "\n")
-    file.close()
-
-    file = open("time.txt", 'w+') 
-    file.truncate(0) # overwrite file
-    for i in range(len(timestamps)):
-         file.write(str(timestamps[i]) + "\n")
-    file.close()
-
-
-
-@client.event
-async def on_message(message):
-    try:
-        id = message.author.id
-        global totalmessages
-        incXP = random.randrange(5, 10)
-        totalmessages += 1
-    
-        if id in leaderboard: # If the ID is on the leaderboard...
-
-            index = leaderboard.index(id) # Find where the ID is on the leaderboard
-            if(round(time.time()) - timestamps[index] >= 30): # 30 second delay
-                xp[index] += incXP # Increment corresponding xp by between 5 and 10 points
-                #print("old timestamp: {time}".format(time=round(time.time())))
-                timestamps[index] = round(time.time())
-                #print("new timestamp: {time}".format(time=round(time.time())))
-                #print("User ID {userid} gained {xpamount}".format(userid=id,xpamount=incXP))
-        else: # If user ID isn't in message
-            print("User ID {userid} is not on leaderboard. Run $initleaderboard again?".format(userid=id))
-            #print("Note: $initleaderboard resets leaderboard, spams, takes a long time.") 
-        await syncboards()
-        await client.process_commands(message) # Lets bot process other commands after event is done
-    except:
-        print("failed to award xp for user {user}".format(user=id))
-        await client.process_commands(message) # Lets bot process other commands after event is done       
-    
-
-
-@client.command()
-async def getxp(ctx,user="0"): 
-    global leaderboard
-    global xp
-    checkuserid = "0"
-    if user == "0":
-        checkuserid = str(ctx.message.author.id)
-    else:
-        checkuserid = str(''.join(c for c in user if c.isdigit()))
-    if int(checkuserid.strip()) in leaderboard: # If the ID is on the leaderboard...
-        index = leaderboard.index(int(checkuserid.strip())) # Find where the ID is on the leaderboard
-        await ctx.send("<@{id}> has {xp} XP!".format(id=int(checkuserid.strip()),xp=xp[index])) 
-    else:
-        await ctx.send("Error! <@{userid}> is not on the leaderboard. :/".format(userid=checkuserid.strip()))
 
 @client.command()
 async def getleaderboard(ctx):
-    global leaderboard
-    global xp
-    text = []
-    indices = sorted(range(len(xp)), key=xp.__getitem__, reverse=True) # black magic fuckery
-    
-    for i in range(6):
-        user = await client.fetch_user(leaderboard[indices[i]])
-        #await ctx.send("#{row}: {user} has {pts} points!".format(row=i+1, user=user, pts=xp[indices[i]]))
-        text.append("#{row}: {user} has {pts} points!\n".format(row=i+1, user=user, pts=xp[indices[i]]))
-    #print(''.join(text))
-    
-    embed = discord.Embed(title=''.join(text), description="Top 6 XP counts!", color=0xFF0000)
+    leaderboards = []
+    for key in userdata:
+        leaderboards.append(LeaderBoardPosition(key, userdata[key]['xp']))
+    top = sorted(leaderboards, key=lambda x: x.xp, reverse=True)
+    text = ''
+    for i in range(0, 5):
+        try:
+            text += f'{i + 1}. {client.get_user(top[i].user)} - {top[i].xp} XP\n'
+        except IndexError:
+            break
+    embed = discord.Embed(title=text, description="Top 6 XP counts!", color=0xFF0000)
     await ctx.send(embed=embed)
 
 
@@ -302,12 +176,10 @@ async def help(ctx):
 
 @client.command()
 async def serverstatus(ctx):
-    text = []
-    text.append("Checking 3 site(s)\n") # todo: make this into a for loop that reads from an array
-    text.append("Note: This may or may not be accurate. Do not trust these results.\n")
-    text.append("*https://taskjourney.org:449*\n")
+    text = ["Checking 3 site(s)\n", "Note: This may or may not be accurate. Do not trust these results.\n",
+            "*https://taskjourney.org:449*\n"]
     code = urlcheck("https://taskjourney.org:449/")
-    if(code != 200):
+    if code != 200:
         text.append("The server sent an abnormal response. If it's 301 or 302, the server redirected the bot. If it's not those, the server might be down. The HTTP code sent was: {http}. ({phrase})\n".format(http=str(code), phrase=httplist[code]))
     else:
         text.append("The server is currently up. (It sent a response code of 200 OK)\n")
@@ -315,14 +187,14 @@ async def serverstatus(ctx):
         code = urlcheck("https://survivreloaded.com/")
     text.append("*https://survivreloaded.com/*\n")
     code = urlcheck("https://survivreloaded.com/")
-    if(code != 200):
+    if code != 200:
         text.append("The server sent an abnormal response. If it's 301 or 302, the server redirected the bot. If it's not those, the server might be down. The HTTP code sent was: {http}. ({phrase})\n".format(http=str(code), phrase=httplist[code]))
     else:
         text.append("The server is currently up. (It sent a response code of 200 OK)\n")
         text.append("If your game is frozen, it's most likely that the client froze or crashed. The game is still relatively unstable, you'll have to reload the game.\n")  
     code = urlcheck("https://resurviv.io/")
     text.append("*https://resurviv.io/*\n")
-    if(code != 200):
+    if code != 200:
         text.append("The server sent an abnormal response. If it's 301 or 302, the server redirected the bot. If it's not those, the server might be down. The HTTP code sent was: {http}. ({phrase})\n".format(http=str(code), phrase=httplist[code]))
     else:
         text.append("The server is currently up. (It sent a response code of 200 OK)\n")
@@ -334,14 +206,14 @@ async def serverstatus(ctx):
 @client.command()
 async def checkurl(ctx,site):
     code = urlcheck(site)
-    if(code != 200):
+    if code != 200:
         await ctx.send("The server is currently down or unresponsive. The HTTP code sent was: {http}. ({phrase})".format(http=str(code), phrase=httplist[code]))
     else:
         await ctx.send("The server is currently up. (It sent a response code of 200 OK)")
 
 @client.command()
 async def resetbot(ctx):
-    if(ctx.message.author.id in owners):
+    if ctx.message.author.id in owners:
         await ctx.send("Bot is reloading, please wait a few seconds before sending commands.")
         exit()
     else:
@@ -349,7 +221,7 @@ async def resetbot(ctx):
 
 @client.command()
 async def ownersonly(ctx):
-    if(ctx.message.author.id in owners):
+    if ctx.message.author.id in owners:
         await ctx.send("You are the owner of this application.")
         exit()
     else:
@@ -357,13 +229,20 @@ async def ownersonly(ctx):
         
         
 def urlcheck(url):
-    signal.alarm(TIMEOUT)    
+    signal.alarm(httplist.TIMEOUT)
     try:
         r = requests.head(url, timeout=3)
         return r.status_code
-    except TimeoutException:
+    except:
         return 999
-        signal.alarm(0)
-        
-#runs the bot token.
-client.run(bottoken.strip())
+
+@tasks.loop(minutes=10)
+async def save():
+    save_all()
+
+async def client_start():
+    save.start()
+    await client.start(bottoken)
+
+
+asyncio.run(client_start())
