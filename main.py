@@ -246,4 +246,4 @@ async def client_start():
     await client.start(bottoken)
 
 
-client.run(client_start())
+await client.run(client_start())
