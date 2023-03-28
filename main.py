@@ -14,7 +14,7 @@ import time
 
 import httplist
 
-owners = [401849772157435905, 876488885419520020] # Owner account IDs
+owners = ['401849772157435905', '876488885419520020'] # Owner account IDs
 
 
 with open('token.txt', 'r') as f:
