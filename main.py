@@ -246,4 +246,4 @@ async def client_start():
     await client.start(bottoken)
 
 
-asyncio.run(client_start())
+client.run(client_start())
