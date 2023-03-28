@@ -243,7 +243,7 @@ async def save():
 
 async def client_start():
     save.start()
-    await client.start(bottoken)
+    await client.run(bottoken)
 
 
-await client.run(client_start())
+await client_start()
