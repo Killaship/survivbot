@@ -138,7 +138,7 @@ async def getleaderboard(ctx):
         leaderboards.append(LeaderBoardPosition(key, userdata[key]['xp']))
     top = sorted(leaderboards, key=lambda x: x.xp, reverse=True)
     text = ''
-    for i in range(0, 5):
+    for i in range(0, 6):
         try:
             text += f'{i + 1}. {client.get_user(top[i].user)} - {top[i].xp} XP\n'
         except IndexError:
