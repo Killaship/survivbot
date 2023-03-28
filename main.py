@@ -244,4 +244,4 @@ async def save():
 
 
 save.start()
-await client.run(bottoken)
+client.run(bottoken)
