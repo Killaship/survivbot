@@ -241,9 +241,7 @@ def urlcheck(url):
 async def save():
     save_all()
 
-async def client_start():
-    save.start()
-    await client.run(bottoken)
 
 
-await client_start()
+save.start()
+await client.run(bottoken)
