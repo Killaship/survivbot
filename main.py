@@ -152,7 +152,7 @@ async def on_message_delete(message):
     channel=client.get_channel(1092435780095451236)
     
     deleted = discord.Embed(description="Message deleted in {msgchannel}".format(msgchannel=message.channel.mention), color=0xFF0000)
-    deleted.add_field(name="Author", value=name=message.author)
+    deleted.add_field(name="Author", value=message.author)
     deleted.add_field(name="Message", value=message.content)
     deleted.timestamp = message.created_at
     
