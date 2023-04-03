@@ -149,9 +149,16 @@ async def getleaderboard(ctx):
 
 @client.event
 async def on_message_delete(message):
+    deleted = discord.Embed(description="Message deleted in {msgchannel}".format(msgchannel=message.channel.mention), color=0xFF0000)
     channel=client.get_channel(1092435780095451236)
     if(message.author.id != 1079242361491693658):
-        deleted = discord.Embed(description="Message deleted in {msgchannel}".format(msgchannel=message.channel.mention), color=0xFF0000)
+        
+    if message.attachments:
+       if(len(message.attachments) == 1):
+           if message.attachments[0].url.endswith(('.jpg', '.png', '.jpeg', '.gif')):
+               embed.set_image(url=message.attachments[0].url)
+           else:
+               embed.add_field(name="Attachment", value=message.attachments[0].url)        
         deleted.add_field(name="Author", value=message.author)
         deleted.add_field(name="Message", value=message.content)
         deleted.timestamp = message.created_at
