@@ -128,7 +128,7 @@ async def getxp(ctx, user: discord.User = None):
     user = ctx.author if not user else user
     if user.id not in userdata:
         await ctx.send(f'{user.mention} has 0 XP!')
-    await ctx.send(f'{user.mention} has {userdata[ctx.message.author.id]["xp"]} XP!')
+    await ctx.send(f'{user.mention} has {userdata[user.id]["xp"]} XP!')
 
 
 @client.command()
