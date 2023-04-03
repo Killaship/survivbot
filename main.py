@@ -151,11 +151,12 @@ async def getleaderboard(ctx):
 async def on_message_delete(message):
     channel=client.get_channel(1092435780095451236)
     
-    deleted = discord.Embed(description=f"Message deleted in {message.channel.mention}", color=0xFF0000).set_author(name=message.author, url=Embed.Empty, icon_url=message.author.avatar_url)
+    deleted = discord.Embed(description="Message deleted in {msgchannel}".format(msgchannel=message.channel.mention), color=0xFF0000)
+    deleted.add_field(name="Author", value=name=message.author)
     deleted.add_field(name="Message", value=message.content)
     deleted.timestamp = message.created_at
     
-    await channel.send(embed=deleted)
+    await channel.send(deleted)
     
 
 @client.command()
