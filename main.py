@@ -149,7 +149,7 @@ async def getleaderboard(ctx):
 
 @client.event
 async def on_message_delete(message):
-    channel=bot.get_channel(1092435780095451236)
+    channel=client.get_channel(1092435780095451236)
     deleted = discord.Embed(
         description=f"Message deleted in {message.channel.mention}", color=0xFF0000
     ).set_author(name=message.author, url=Embed.Empty, icon_url=message.author.avatar_url)
