@@ -155,7 +155,7 @@ async def on_message_delete(message):
         
         if message.attachments:
             if(len(message.attachments) == 1):
-                if message.attachments[0].url.endswith(('.jpg', '.png', '.jpeg', '.gif', '.mp4', '.mp3')):
+                if message.attachments[0].url.endswith(('.jpg', '.png', '.jpeg', '.gif', '.mp4')):
                     deleted.set_image(url=message.attachments[0].url)
                 else:
                     deleted.add_field(name="Attachment", value=message.attachments[0].url) # No attachment or unsupported file     
