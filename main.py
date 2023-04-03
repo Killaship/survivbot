@@ -164,6 +164,26 @@ async def on_message_delete(message):
         deleted.timestamp = message.created_at
         await channel.send(embed=deleted)
     
+    
+@client.event
+async def on_message_edit(message_before, message_after):
+    edited = discord.Embed(description="Message edited in {msgchannel}".format(msgchannel=message_before.channel.mention), color=0xFFFF00)
+    channel=client.get_channel(1092435780095451236)
+    if(message_before.author.id != 1079242361491693658):
+        
+        if message_before.attachments:
+            if(len(message_before.attachments) == 1):
+                if message_before.attachments[0].url.endswith(('.jpg', '.png', '.jpeg', '.gif')):
+                    edited.set_image(url=message_before.attachments[0].url)
+                else:
+                    edited.add_field(name="Attachment", value=message_before.attachments[0].url) # No attachment or unsupported file     
+        edited.add_field(name="Author", value=message_before.author)
+        edited.add_field(name="Message Before", value=message_before.content)
+        edited.add_field(name="Message After", value=message_after.content)
+        edited.timestamp = message_before.created_at
+        await channel.send(embed=deleted)
+    
+    
 
 @client.command()
 async def help(ctx):
