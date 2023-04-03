@@ -156,9 +156,9 @@ async def on_message_delete(message):
         if message.attachments:
             if(len(message.attachments) == 1):
                 if message.attachments[0].url.endswith(('.jpg', '.png', '.jpeg', '.gif')):
-                    embed.set_image(url=message.attachments[0].url)
+                    deleted.set_image(url=message.attachments[0].url)
                 else:
-                    embed.add_field(name="Attachment", value=message.attachments[0].url)        
+                    deleted.add_field(name="Attachment", value=message.attachments[0].url)        
         deleted.add_field(name="Author", value=message.author)
         deleted.add_field(name="Message", value=message.content)
         deleted.timestamp = message.created_at
