@@ -156,7 +156,7 @@ async def on_message_delete(message):
     deleted.add_field(name="Message", value=message.content)
     deleted.timestamp = message.created_at
     
-    await channel.send(deleted)
+    await channel.send(embed=deleted)
     
 
 @client.command()
