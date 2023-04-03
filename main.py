@@ -154,11 +154,11 @@ async def on_message_delete(message):
     if(message.author.id != 1079242361491693658):
         
     if message.attachments:
-       if(len(message.attachments) == 1):
-           if message.attachments[0].url.endswith(('.jpg', '.png', '.jpeg', '.gif')):
-               embed.set_image(url=message.attachments[0].url)
-           else:
-               embed.add_field(name="Attachment", value=message.attachments[0].url)        
+        if(len(message.attachments) == 1):
+            if message.attachments[0].url.endswith(('.jpg', '.png', '.jpeg', '.gif')):
+                embed.set_image(url=message.attachments[0].url)
+            else:
+                embed.add_field(name="Attachment", value=message.attachments[0].url)        
         deleted.add_field(name="Author", value=message.author)
         deleted.add_field(name="Message", value=message.content)
         deleted.timestamp = message.created_at
