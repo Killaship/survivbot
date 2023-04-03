@@ -181,7 +181,7 @@ async def on_message_edit(message_before, message_after):
         edited.add_field(name="Message Before", value=message_before.content)
         edited.add_field(name="Message After", value=message_after.content)
         edited.timestamp = message_before.created_at
-        await channel.send(embed=deleted)
+        await channel.send(embed=edited)
     
     
 
