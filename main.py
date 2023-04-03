@@ -147,7 +147,7 @@ async def getleaderboard(ctx):
     await ctx.send(embed=embed)
 
 
-@client.event()
+@client.event
 async def on_message_delete(message):
     channel=bot.get_channel(1092435780095451236)
     deleted = discord.Embed(
