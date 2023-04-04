@@ -220,7 +220,7 @@ async def serverstatus(ctx):
             "*https://taskjourney.org:449*\n"]
     code = urlcheck("https://taskjourney.org:449/")
     if code != 200:
-        text.append("The server sent an abnormal response. If it's 301 or 302, the server redirected the bot. If it's not those, the server might be down. The HTTP code sent was: {http}. ({phrase})\n".format(http=str(code), phrase=httplist[code]))
+        text.append("The server sent an abnormal response. If it's 301 or 302, the server redirected the bot. If it's not those, the server might be down. The HTTP code sent was: {http}. ({phrase})\n".format(http=str(code), phrase=httplist.httplist[code]))
     else:
         text.append("The server is currently up. (It sent a response code of 200 OK)\n")
         text.append("If your game is frozen, it's most likely that the client froze or crashed. The game is still relatively unstable, you'll have to reload the game.\n")
@@ -228,14 +228,14 @@ async def serverstatus(ctx):
     text.append("*https://survivreloaded.com/*\n")
     code = urlcheck("https://survivreloaded.com/")
     if code != 200:
-        text.append("The server sent an abnormal response. If it's 301 or 302, the server redirected the bot. If it's not those, the server might be down. The HTTP code sent was: {http}. ({phrase})\n".format(http=str(code), phrase=httplist[code]))
+        text.append("The server sent an abnormal response. If it's 301 or 302, the server redirected the bot. If it's not those, the server might be down. The HTTP code sent was: {http}. ({phrase})\n".format(http=str(code), phrase=httplist.httplist[code]))
     else:
         text.append("The server is currently up. (It sent a response code of 200 OK)\n")
         text.append("If your game is frozen, it's most likely that the client froze or crashed. The game is still relatively unstable, you'll have to reload the game.\n")  
     code = urlcheck("https://resurviv.io/")
     text.append("*https://resurviv.io/*\n")
     if code != 200:
-        text.append("The server sent an abnormal response. If it's 301 or 302, the server redirected the bot. If it's not those, the server might be down. The HTTP code sent was: {http}. ({phrase})\n".format(http=str(code), phrase=httplist[code]))
+        text.append("The server sent an abnormal response. If it's 301 or 302, the server redirected the bot. If it's not those, the server might be down. The HTTP code sent was: {http}. ({phrase})\n".format(http=str(code), phrase=httplist.httplist[code]))
     else:
         text.append("The server is currently up. (It sent a response code of 200 OK)\n")
         text.append("If your game is frozen, it's most likely that the client froze or crashed. The game is still relatively unstable, you'll have to reload the game.\n")
