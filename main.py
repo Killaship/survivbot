@@ -247,7 +247,7 @@ async def serverstatus(ctx):
 async def checkurl(ctx,site):
     code = urlcheck(site)
     if code != 200:
-        await ctx.send("The server is currently down or unresponsive. The HTTP code sent was: {http}. ({phrase})".format(http=str(code), phrase=httplist[code]))
+        await ctx.send("The server is currently down or unresponsive. The HTTP code sent was: {http}. ({phrase})".format(http=str(code), phrase=httplist.httplist[code]))
     else:
         await ctx.send("The server is currently up. (It sent a response code of 200 OK)")
 
