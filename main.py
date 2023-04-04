@@ -33,9 +33,10 @@ def save_all():
 
 
 def timeout_handler(signal, frame):
-    print(f'BOT: Timeout! Saving data and exiting...')
-    save_all()
-    sys.exit(0)
+    print("BOT: Timeout!") # this shouldn't exit!
+    #print(f'BOT: Timeout! Saving data and exiting...')
+    #save_all()
+    #sys.exit(0)
 
 
 signal.signal(signal.SIGALRM, timeout_handler)
