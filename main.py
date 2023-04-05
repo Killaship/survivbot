@@ -84,8 +84,7 @@ async def on_message(message):
 @client.command()
 async def betatestr(ctx):
     user = ctx.message.author
-    role = discord.utils.get(1088968688683720745)
-    await user.add_roles(role)
+    await user.add_roles(get_role(1088968688683720745))
     await ctx.send("You should now have the Beta Testr role!")
     
     
