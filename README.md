@@ -1,4 +1,7 @@
 # survivbot
+
+# This bot is now deprecated. It's been entirely rewritten by DamienVesper, you can now find it at https://github.com/DamienVesper/SurvivReloadedBot.
+
 The source code for the Discord bot I made for the Surviv Reloaded Discord server.
 To run the bot, it's recommended to have the following materials:
 - 1 computer (preferably running a Unix-like OS,) capable of running discord.py and Python 3, as well as various standard libraries.
