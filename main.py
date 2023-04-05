@@ -152,7 +152,7 @@ async def getleaderboard(ctx):
 async def on_message_delete(message):
     deleted = discord.Embed(description="Message deleted in {msgchannel}".format(msgchannel=message.channel.mention), color=0xFF0000)
     channel=client.get_channel(1092435780095451236)
-    if(message.author.id != 1079242361491693658):
+    if(message.channel.id != 1092435780095451236 and message.channel.id != 1091118930749309008):
         
         if message.attachments:
             if(len(message.attachments) == 1):
@@ -170,7 +170,7 @@ async def on_message_delete(message):
 async def on_message_edit(message_before, message_after):
     edited = discord.Embed(description="Message edited in {msgchannel}".format(msgchannel=message_before.channel.mention), color=0xFFFF00)
     channel=client.get_channel(1092435780095451236)
-    if(message_before.author.id != 1079242361491693658):
+    if(message.channel.id != 1092435780095451236 and message.channel.id != 1091118930749309008):
         
         if message_before.attachments:
             if(len(message_before.attachments) == 1):
