@@ -82,6 +82,12 @@ async def on_message(message):
 
 
 @client.command()
+async def betatest(ctx):
+    user = ctx.message.author
+    await client.add_roles(user, 1088968688683720745)
+    
+    
+@client.command()
 async def explain(ctx):
     embed = discord.Embed(title="Explanation of This:tm:", description="", color=0xFF0000)
     embed.add_field(name="What is this server?", value="This Discord Server is the community area for Surviv Reloaded, open-source server for the defunct online game surviv.io.")
@@ -110,6 +116,7 @@ async def awardxp(ctx, user: discord.User, amount = 0):
         await ctx.send(f'Gave {user.mention} {amount} XP!')
     
     
+=
   
 @client.command()
 async def links(ctx):
