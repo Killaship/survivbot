@@ -116,7 +116,7 @@ async def awardxp(ctx, user: discord.User, amount = 0):
         await ctx.send(f'Gave {user.mention} {amount} XP!')
     
     
-=
+
   
 @client.command()
 async def links(ctx):
